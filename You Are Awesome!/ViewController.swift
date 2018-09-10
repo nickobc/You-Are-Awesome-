@@ -7,11 +7,18 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var awesomeImageView: UIImageView!
     @IBOutlet weak var messageLabel: UILabel!
-    var index = 0
+    var awesomePlayer = AVAudioPlayer()
+    var index = -1
+    var imageIndex = -1
+    var soundIndex = -1
+    let numberOfImages = 10
+    let numberOfSounds = 6
     
     
     // code below executes when the app's view first loads
@@ -35,6 +42,7 @@ class ViewController: UIViewController {
     
     var newIndex: Int
     
+    // Show A Message
     repeat {
         newIndex = Int.random(in: 0..<messages.count)
     } while index == newIndex
@@ -42,32 +50,33 @@ class ViewController: UIViewController {
     index = newIndex
     messageLabel.text = messages[index]
     
+    // Show An Image
+    repeat {
+        newIndex = Int.random(in: 0..<numberOfImages)
+    } while imageIndex == newIndex
     
-//    messageLabel.text = messages.randomElement()!
+    imageIndex = newIndex
+    awesomeImageView.image = UIImage(named: "image\(imageIndex)")
     
+    // Play A Sound
+    repeat {
+        newIndex = Int.random(in: 0..<numberOfSounds)
+    } while soundIndex == newIndex
     
-//messageLabel.text = messages[index]
+    soundIndex = newIndex
     
-//  if index == messages.count - 1 {
-//    index = 0
-// } else {
-//     index = index + 1
-//   }
-    
-    
-//        let message1 = "You Are Awesome!"
-//        let message2 = "You Are Great!"
-//        let message3 = "You Are Amazing!"
-//
-//        if messageLabel.text == message1 {
-//            messageLabel.text = message2
-//        } else if messageLabel.text == message2 {
-//        messageLabel.text = message3
-//        } else {
-//            messageLabel.text = message1
-//        }
-//    }
-    
+    var soundName = "sound\(soundIndex)"
+
+    if let sound = NSDataAsset(name: soundName){
+        do{
+            try awesomePlayer = AVAudioPlayer(data: sound.data)
+            awesomePlayer.play()
+        } catch {
+            print("ERROR: data in \(soundName) couldn't be played as a sound")
+        }
+    } else {
+        print("ERROR: file \(soundName) didn't load")
+    }
 }
 
 }
